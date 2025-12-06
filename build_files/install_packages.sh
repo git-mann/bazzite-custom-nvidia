@@ -10,11 +10,9 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-dnf5 install -y sssd-common
 
 dnf5 install -y \
     freeipa-client \
-    sssd-passkey \
     htop \
     bat \
     fd-find \
@@ -23,7 +21,10 @@ dnf5 install -y \
     qrencode \
     uv \
     zoxide \
-    powerline-fonts
+    powerline-fonts \
+&& chown root:sssd /usr/libexec/sssd/selinux_child \
+&& restorecon /usr/libexec/sssd/selinux_child \
+&& setcap cap_setgid,cap_setuid=p /usr/libexec/sssd/selinux_child
 
 # Use a COPR Example:
 dnf5 -y copr enable derenderkeks/proxmox-backup-client
